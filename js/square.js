@@ -4,12 +4,12 @@ module.exports = React.createClass({
     render: function() {
         if (this.props.status == 'empty') {
             return (
-                <span className={this.props.key}>[ ]</span>
+                <span className="square">[ ]</span>
             );
         }
         else {
             return (
-                <span className={this.props.key}>[x]</span>
+                <span className="square">[x]</span>
             );
         }
     }

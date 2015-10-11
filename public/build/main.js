@@ -9,21 +9,16 @@ module.exports = React.createClass({
     displayName: "exports",
 
     render: function render() {
-        var rows = Array(this.props.board_size);
-        for (var i = 0; i < this.props.board_size; i++) {
-            rows[i] = [];
-            for (var j = 0; j < this.props.board_size; j++) {
-                rows[i].push(React.createElement(Square, { key: this.props.board[i][j].id, status: this.props.board[i][j].status }));
-            }
-        }
         return React.createElement(
             "div",
             null,
-            rows.map(function (row) {
+            this.props.board.map(function (row, index) {
                 return React.createElement(
                     "div",
-                    { className: "row" },
-                    row
+                    { key: index },
+                    row.map(function (item) {
+                        return React.createElement(Square, { key: item.key, status: item.status });
+                    })
                 );
             })
         );
@@ -56,7 +51,7 @@ var Information = require("./information.js");
 var Board = require("./board.js");
 
 var SquareItem = function SquareItem(id, status) {
-    this.id = id;
+    this.key = id;
     this.status = status;
 };
 
@@ -113,13 +108,13 @@ module.exports = React.createClass({
         if (this.props.status == "empty") {
             return React.createElement(
                 "span",
-                { className: this.props.key },
+                { className: "square" },
                 "[ ]"
             );
         } else {
             return React.createElement(
                 "span",
-                { className: this.props.key },
+                { className: "square" },
                 "[x]"
             );
         }

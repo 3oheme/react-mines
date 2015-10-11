@@ -4,7 +4,7 @@ var Information = require('./information.js');
 var Board = require('./board.js');
 
 var SquareItem = function(id, status) {
-    this.id = id;
+    this.key = id;
     this.status = status;
 }
 
