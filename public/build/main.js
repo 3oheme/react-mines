@@ -13,7 +13,7 @@ module.exports = React.createClass({
         for (var i = 0; i < this.props.board_size; i++) {
             rows[i] = [];
             for (var j = 0; j < this.props.board_size; j++) {
-                rows[i].push(React.createElement(Square, { key: i + "-" + j, name: i + "-" + j, status: this.props.board[i][j] }));
+                rows[i].push(React.createElement(Square, { key: this.props.board[i][j].id, status: this.props.board[i][j].status }));
             }
         }
         return React.createElement(
@@ -55,24 +55,35 @@ var React = require("react");
 var Information = require("./information.js");
 var Board = require("./board.js");
 
+var SquareItem = function SquareItem(id, status) {
+    this.id = id;
+    this.status = status;
+};
+
 var Game = React.createClass({
     displayName: "Game",
 
     config: {
         board_size: 8
     },
-    getInitialState: function getInitialState() {
-        var new_board = new Array(this.config.board_size);
-        for (var i = 0; i < this.config.board_size; i++) {
-            new_board[i] = new Array(this.config.board_size);
-            for (var j = 0; j < this.config.board_size; j++) {
-                new_board[i][j] = "empty";
+
+    _createNxNBoard: function _createNxNBoard(size) {
+        var board = new Array(size);
+        for (var i = 0; i < size; i++) {
+            board[i] = new Array(size);
+            for (var j = 0; j < size; j++) {
+                board[i][j] = new SquareItem("id" + i + "-" + j, "empty");
             }
         }
+        return board;
+    },
+
+    getInitialState: function getInitialState() {
         return {
-            board: new_board
+            board: this._createNxNBoard(this.config.board_size)
         };
     },
+
     render: function render() {
         return React.createElement(
             "div",
@@ -102,13 +113,13 @@ module.exports = React.createClass({
         if (this.props.status == "empty") {
             return React.createElement(
                 "span",
-                { className: this.props.name },
+                { className: this.props.key },
                 "[ ]"
             );
         } else {
             return React.createElement(
                 "span",
-                { className: this.props.name },
+                { className: this.props.key },
                 "[x]"
             );
         }
