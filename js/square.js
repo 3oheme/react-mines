@@ -8,7 +8,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var classes = classNames('square');
+        var classes = classNames(
+            'square',
+            (this.props.item.revealed) ? 'revealed' : 'hidden');
         var body = (this.props.item.revealed) ? '[_]' : '[x]'
 
         return(
