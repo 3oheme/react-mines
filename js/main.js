@@ -14,6 +14,10 @@ var Game = React.createClass({
         board_size: 8
     },
 
+    _handleClick: function(e, key) {
+        console.log(key);
+    },
+
     _createNxNBoard: function(size) {
         var board = new Array(size);
         for (var i = 0; i < size; i++) {
@@ -36,7 +40,7 @@ var Game = React.createClass({
             <div>
                 <p>this is the game wrapper</p>
                 <Information />
-                <Board board={this.state.board} board_size={this.config.board_size} />
+                <Board board={this.state.board} action={this._handleClick} board_size={this.config.board_size} />
             </div>
         );
     }

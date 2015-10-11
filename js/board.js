@@ -11,11 +11,11 @@ module.exports = React.createClass({
                     return (
                         <div key={index}>
                             {row.map(function(item) {
-                                return (<Square key={item.key} status={item.status} />);
-                            })}
+                                return (<Square key={item.key} action={this.props.action} id={item.key} status={item.status} />);
+                            }, this)}
                         </div>
                     )
-                })}
+                }, this)}
             </div>
         );
     }
