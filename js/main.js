@@ -3,9 +3,10 @@ var React = require('react');
 var Information = require('./information.js');
 var Board = require('./board.js');
 
-var SquareItem = function(id, status) {
+var SquareItem = function(id, value) {
     this.key = id;
-    this.status = status;
+    this.value = value;
+    this.revealed = false;
 }
 
 var Game = React.createClass({
@@ -14,8 +15,13 @@ var Game = React.createClass({
         board_size: 8
     },
 
-    _handleClick: function(e, key) {
-        console.log(key);
+    _handleClick: function(e, item) {
+        e.preventDefault();
+        var new_board = this.state.board;
+        new_board[item.pos_x][item.pos_y].revealed = !this.state.board[item.pos_x][item.pos_y].revealed;
+        this.setState({
+            board: new_board
+        });
     },
 
     _createNxNBoard: function(size) {

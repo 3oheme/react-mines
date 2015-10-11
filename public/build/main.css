@@ -1,2 +1,16 @@
 body {
   background: #EEE; }
+
+.board {
+  display: table;
+  table-layout: fixed; }
+
+.board-row {
+  display: table-row; }
+
+.square {
+  display: table-cell;
+  text-align: center;
+  cursor: pointer;
+  width: 1%;
+  padding: 10px; }

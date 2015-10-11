@@ -11,13 +11,13 @@ module.exports = React.createClass({
     render: function render() {
         return React.createElement(
             "div",
-            null,
-            this.props.board.map(function (row, index) {
+            { className: "board" },
+            this.props.board.map(function (row, index_x) {
                 return React.createElement(
                     "div",
-                    { key: index },
-                    row.map(function (item) {
-                        return React.createElement(Square, { key: item.key, action: this.props.action, id: item.key, status: item.status });
+                    { className: "board--row", key: index_x },
+                    row.map(function (item, index_y) {
+                        return React.createElement(Square, { key: item.key, pos_x: index_x, pos_y: index_y, action: this.props.action, id: item.key, item: item });
                     }, this)
                 );
             }, this)
@@ -50,9 +50,10 @@ var React = require("react");
 var Information = require("./information.js");
 var Board = require("./board.js");
 
-var SquareItem = function SquareItem(id, status) {
+var SquareItem = function SquareItem(id, value) {
     this.key = id;
-    this.status = status;
+    this.value = value;
+    this.revealed = false;
 };
 
 var Game = React.createClass({
@@ -62,8 +63,13 @@ var Game = React.createClass({
         board_size: 8
     },
 
-    _handleClick: function _handleClick(e, key) {
-        console.log(key);
+    _handleClick: function _handleClick(e, item) {
+        e.preventDefault();
+        var new_board = this.state.board;
+        new_board[item.pos_x][item.pos_y].revealed = !this.state.board[item.pos_x][item.pos_y].revealed;
+        this.setState({
+            board: new_board
+        });
     },
 
     _createNxNBoard: function _createNxNBoard(size) {
@@ -110,12 +116,12 @@ module.exports = React.createClass({
     displayName: "exports",
 
     _handleClick: function _handleClick(e) {
-        this.props.action(e, this.props.id);
+        this.props.action(e, this.props);
     },
 
     render: function render() {
         var classes = classNames("square");
-        var body = this.props.status == "empty" ? "[ ]" : "[x]";
+        var body = this.props.item.revealed ? "[_]" : "[x]";
 
         return React.createElement(
             "span",
