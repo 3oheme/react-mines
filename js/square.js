@@ -5,7 +5,7 @@ module.exports = React.createClass({
 
     flag: 'F',
     bomb: 'B',
-    hidden: '·',
+    hidden: ' ',
 
     _handleClick: function(e) {
         this.props.action(e, this.props);
@@ -15,7 +15,7 @@ module.exports = React.createClass({
         var classes = classNames(
             'square',
             (this.props.item.revealed) ? 'revealed' : 'hidden',
-            (!this.props.item.bomb) ? ('number-'+ this.props.item.number) : ''
+            (!this.props.item.bomb) ? ('number-'+ this.props.item.number) : 'bomb'
             );
         var content = (this.props.item.bomb) ? this.bomb : this.props.item.number;
         var body = (this.props.item.revealed) ? content : this.hidden;

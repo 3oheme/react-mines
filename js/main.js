@@ -62,7 +62,7 @@ var Game = React.createClass({
         }
 
         var new_board = this.state.board;
-        new_board[item.pos_x][item.pos_y].revealed = !this.state.board[item.pos_x][item.pos_y].revealed;
+        new_board[item.pos_x][item.pos_y].revealed = true;
         this.setState({
             board: new_board
         });

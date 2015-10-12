@@ -15,7 +15,16 @@ body {
   width: 20px;
   padding: 10px;
   overflow: hidden;
-  background: #FFFFFF; }
+  background: #FFFFFF;
+  vertical-align: middle;
+  height: 20px;
+    height--webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: background 0.2s ease-out; }
   .square.bomb {
     background: #F00; }
   .square.hidden {
@@ -23,10 +32,10 @@ body {
   .square.revealed.number-1 {
     background: #BAA; }
   .square.revealed.number-2 {
-    background: #CAA; }
+    background: #D88484; }
   .square.revealed.number-3 {
-    background: #DAA; }
+    background: #F36565; }
   .square.revealed.number-4 {
-    background: #EDD; }
+    background: #F92424; }
   .square.revealed.number-5 {
-    background: #FDD; }
+    background: #E40303; }
