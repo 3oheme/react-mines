@@ -36,8 +36,19 @@ module.exports = React.createClass({
     render: function render() {
         return React.createElement(
             "div",
-            null,
-            "this is the info area"
+            { className: "header-menu" },
+            React.createElement(
+                "span",
+                null,
+                "Flags: ",
+                this.props.flags
+            ),
+            " — ",
+            React.createElement(
+                "button",
+                { onClick: this.props.action },
+                "New game"
+            )
         );
     }
 });
@@ -55,6 +66,7 @@ var SquareItem = function SquareItem(id, value) {
     this.number = value;
     this.revealed = false;
     this.bomb = false;
+    this.flag = false;
 };
 
 var Game = React.createClass({
@@ -62,10 +74,10 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 30
+        bombs: 8
     },
 
-    getRandomInt: function getRandomInt(min, max) {
+    _getRandomInt: function _getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
@@ -73,8 +85,8 @@ var Game = React.createClass({
         var new_board = this.state.board;
         // place bombs randomly, but avoiding first click position
         for (var i = 0; i < this.config.bombs;) {
-            var x = this.getRandomInt(0, this.config.board_size - 1);
-            var y = this.getRandomInt(0, this.config.board_size - 1);
+            var x = this._getRandomInt(0, this.config.board_size - 1);
+            var y = this._getRandomInt(0, this.config.board_size - 1);
             if (x != pos_x && y != pos_y) {
                 new_board[x][y].bomb = true;
                 i++;
@@ -84,7 +96,6 @@ var Game = React.createClass({
         for (var i = 0; i < this.config.board_size; i++) {
             for (var j = 0; j < this.config.board_size; j++) {
                 var count = 0;
-
                 for (var left = -1; left < 2; left++) {
                     for (var top = -1; top < 2; top++) {
                         if (i + left >= 0 && i + left < this.config.board_size && j + top >= 0 && j + top < this.config.board_size) {
@@ -92,14 +103,21 @@ var Game = React.createClass({
                         }
                     }
                 }
-
                 new_board[i][j].number = count;
             }
         }
         return new_board;
     },
 
-    _handleSquareClick: function _handleSquareClick(e, item) {
+    _handleNewGameClick: function _handleNewGameClick(e) {
+        e.preventDefault();
+        this.setState({
+            board: this._createEmptyNxNBoard(this.config.board_size),
+            board_init: false
+        });
+    },
+
+    _handleSquareClick: function _handleSquareClick(e, item, right_click) {
         e.preventDefault();
         if (this.state.board_init == false) {
             var new_board = this.setUpBoard(item.pos_x, item.pos_y);
@@ -110,10 +128,29 @@ var Game = React.createClass({
         }
 
         var new_board = this.state.board;
-        new_board[item.pos_x][item.pos_y].revealed = true;
-        this.setState({
-            board: new_board
-        });
+
+        if (right_click) {
+            if (new_board[item.pos_x][item.pos_y].revealed == false) {
+                if (new_board[item.pos_x][item.pos_y].flag) {
+                    new_board[item.pos_x][item.pos_y].flag = false;
+                    this.setState({
+                        board: new_board,
+                        flags: this.state.flags + 1
+                    });
+                } else if (this.state.flags > 0) {
+                    new_board[item.pos_x][item.pos_y].flag = true;
+                    this.setState({
+                        board: new_board,
+                        flags: this.state.flags - 1
+                    });
+                }
+            }
+        } else {
+            new_board[item.pos_x][item.pos_y].revealed = true;
+            this.setState({
+                board: new_board
+            });
+        }
     },
 
     _createEmptyNxNBoard: function _createEmptyNxNBoard(size) {
@@ -130,14 +167,16 @@ var Game = React.createClass({
     getInitialState: function getInitialState() {
         return {
             board: this._createEmptyNxNBoard(this.config.board_size),
-            board_init: false };
+            board_init: false,
+            flags: this.config.bombs
+        };
     },
 
     render: function render() {
         return React.createElement(
             "div",
             null,
-            React.createElement(Information, null),
+            React.createElement(Information, { flags: this.state.flags, action: this._handleNewGameClick }),
             React.createElement(Board, { board: this.state.board, action: this._handleSquareClick, board_size: this.config.board_size })
         );
     }
@@ -158,18 +197,34 @@ module.exports = React.createClass({
     bomb: "B",
     hidden: " ",
 
-    _handleClick: function _handleClick(e) {
+    _handleLeftClick: function _handleLeftClick(e) {
         this.props.action(e, this.props);
+    },
+
+    _handleRightClick: function _handleRightClick(e) {
+        this.props.action(e, this.props, true);
     },
 
     render: function render() {
         var classes = classNames("square", this.props.item.revealed ? "revealed" : "hidden", !this.props.item.bomb ? "number-" + this.props.item.number : "bomb");
-        var content = this.props.item.bomb ? this.bomb : this.props.item.number;
-        var body = this.props.item.revealed ? content : this.hidden;
+
+        var body = "";
+
+        if (this.props.item.revealed) {
+            if (this.props.item.bomb) {
+                body = this.bomb;
+            } else {
+                body = this.props.item.number;
+            }
+        } else if (this.props.item.flag) {
+            body = this.flag;
+        } else {
+            body = this.hidden;
+        }
 
         return React.createElement(
             "span",
-            { onClick: this._handleClick, className: classes },
+            { onClick: this._handleLeftClick, onContextMenu: this._handleRightClick, className: classes },
             body
         );
     }

@@ -7,8 +7,12 @@ module.exports = React.createClass({
     bomb: 'B',
     hidden: ' ',
 
-    _handleClick: function(e) {
+    _handleLeftClick: function(e) {
         this.props.action(e, this.props);
+    },
+
+    _handleRightClick: function(e) {
+        this.props.action(e, this.props, true);
     },
 
     render: function() {
@@ -17,11 +21,27 @@ module.exports = React.createClass({
             (this.props.item.revealed) ? 'revealed' : 'hidden',
             (!this.props.item.bomb) ? ('number-'+ this.props.item.number) : 'bomb'
             );
-        var content = (this.props.item.bomb) ? this.bomb : this.props.item.number;
-        var body = (this.props.item.revealed) ? content : this.hidden;
+
+        var body = '';
+
+        if (this.props.item.revealed) {
+            if (this.props.item.bomb) {
+                body = this.bomb;
+            }
+            else {
+                body = this.props.item.number;
+            }
+        }
+        
+        else if (this.props.item.flag) {
+            body = this.flag;
+        }
+        else {
+            body = this.hidden;
+        }
 
         return(
-            <span onClick={this._handleClick} className={classes}>{body}</span>
+            <span onClick={this._handleLeftClick} onContextMenu={this._handleRightClick} className={classes}>{body}</span>
         );
 
     }
