@@ -12,9 +12,21 @@ body {
   display: table-cell;
   text-align: center;
   cursor: pointer;
-  width: 1%;
+  width: 20px;
   padding: 10px;
   overflow: hidden;
-  background: #EE99EE; }
+  background: #FFFFFF; }
+  .square.bomb {
+    background: #F00; }
   .square.hidden {
-    background: #DDD; }
+    background: #AAA; }
+  .square.revealed.number-1 {
+    background: #BAA; }
+  .square.revealed.number-2 {
+    background: #CAA; }
+  .square.revealed.number-3 {
+    background: #DAA; }
+  .square.revealed.number-4 {
+    background: #EDD; }
+  .square.revealed.number-5 {
+    background: #FDD; }
