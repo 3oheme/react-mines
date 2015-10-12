@@ -51,7 +51,7 @@ var Game = React.createClass({
         return new_board;
     },
 
-    _handleClick: function(e, item) {
+    _handleSquareClick: function(e, item) {
         e.preventDefault();
         if (this.state.board_init == false ) {
             var new_board = this.setUpBoard(item.pos_x, item.pos_y);
@@ -90,7 +90,7 @@ var Game = React.createClass({
         return (
             <div>
                 <Information />
-                <Board board={this.state.board} action={this._handleClick} board_size={this.config.board_size} />
+                <Board board={this.state.board} action={this._handleSquareClick} board_size={this.config.board_size} />
             </div>
         );
     }
