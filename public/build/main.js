@@ -62,7 +62,7 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 8
+        bombs: 30
     },
 
     getRandomInt: function getRandomInt(min, max) {
@@ -71,13 +71,16 @@ var Game = React.createClass({
 
     setUpBoard: function setUpBoard(pos_x, pos_y) {
         var new_board = this.state.board;
-        // place bombs randomly
-        for (var i = 0; i < this.config.bombs; i++) {
+        // place bombs randomly, but avoiding first click position
+        for (var i = 0; i < this.config.bombs;) {
             var x = this.getRandomInt(0, this.config.board_size - 1);
             var y = this.getRandomInt(0, this.config.board_size - 1);
-            new_board[x][y].bomb = true;
+            if (x != pos_x && y != pos_y) {
+                new_board[x][y].bomb = true;
+                i++;
+            }
         }
-        // update square content
+        // update square content with neighbor number
         for (var i = 0; i < this.config.board_size; i++) {
             for (var j = 0; j < this.config.board_size; j++) {
                 var count = 0;
@@ -85,7 +88,6 @@ var Game = React.createClass({
                 for (var left = -1; left < 2; left++) {
                     for (var top = -1; top < 2; top++) {
                         if (i + left >= 0 && i + left < this.config.board_size && j + top >= 0 && j + top < this.config.board_size) {
-                            // console.log("i:" + i + " - i+left" + (i+left) + " - j:" + j + " - j+top" + (j+top));
                             count = count + (new_board[i + left][j + top].bomb ? 1 : 0);
                         }
                     }
@@ -94,7 +96,6 @@ var Game = React.createClass({
                 new_board[i][j].number = count;
             }
         }
-        console.log(new_board);
         return new_board;
     },
 
@@ -136,11 +137,6 @@ var Game = React.createClass({
         return React.createElement(
             "div",
             null,
-            React.createElement(
-                "p",
-                null,
-                "this is the game wrapper"
-            ),
             React.createElement(Information, null),
             React.createElement(Board, { board: this.state.board, action: this._handleClick, board_size: this.config.board_size })
         );
@@ -160,7 +156,7 @@ module.exports = React.createClass({
 
     flag: "F",
     bomb: "B",
-    hidden: "-",
+    hidden: "·",
 
     _handleClick: function _handleClick(e) {
         this.props.action(e, this.props);

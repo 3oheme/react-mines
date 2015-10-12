@@ -5,7 +5,7 @@ module.exports = React.createClass({
 
     flag: 'F',
     bomb: 'B',
-    hidden: '-',
+    hidden: '·',
 
     _handleClick: function(e) {
         this.props.action(e, this.props);
