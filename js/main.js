@@ -2,6 +2,7 @@ var React = require('react');
 
 var Information = require('./information.js');
 var Board = require('./board.js');
+var MessageBar = require('./messagebar.js');
 
 var SquareItem = function(id, value) {
     this.key = id;
@@ -18,7 +19,6 @@ var Game = React.createClass({
         bombs: 12
     },
 
-
     _getRandomInt: function(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
@@ -29,7 +29,7 @@ var Game = React.createClass({
         for (var i = 0; i < this.config.bombs;) {
             var x = this._getRandomInt(0, this.config.board_size -1);
             var y = this._getRandomInt(0, this.config.board_size -1);
-            if (x != pos_x && y != pos_y) {
+            if (x != pos_x && y != pos_y && new_board[x][y].bomb == false) {
                 new_board[x][y].bomb = true;
                 i++;
             }
@@ -77,14 +77,16 @@ var Game = React.createClass({
                     new_board[item.pos_x][item.pos_y].flag = false;
                     this.setState({
                         board: new_board,
-                        flags: this.state.flags + 1
+                        flags: this.state.flags + 1,
+                        message: 'removeflag'
                     });
                 }
                 else if (this.state.flags > 0) {
                     new_board[item.pos_x][item.pos_y].flag = true;
                     this.setState({
                         board: new_board,
-                        flags: this.state.flags - 1 
+                        flags: this.state.flags - 1,
+                        message: 'addflag'
                     });
                 }
             }
@@ -96,7 +98,8 @@ var Game = React.createClass({
             else {
                 new_board[item.pos_x][item.pos_y].revealed = true;
                 this.setState({
-                    board: new_board
+                    board: new_board,
+                    message: 'reveal'
                 });
             }
         }
@@ -111,7 +114,9 @@ var Game = React.createClass({
             }
         }
         this.setState({
-            board: new_board
+            board: new_board,
+            flags: this.config.bombs,
+            message: 'gameover'
         });
     },
 
@@ -130,7 +135,8 @@ var Game = React.createClass({
         return({
             board: this._createEmptyNxNBoard(this.config.board_size),
             board_init: false,
-            flags: this.config.bombs
+            flags: this.config.bombs,
+            message: 'welcome'
         });
     },
 
@@ -139,6 +145,7 @@ var Game = React.createClass({
             <div>
                 <Information flags={this.state.flags} action={this._handleNewGameClick} />
                 <Board board={this.state.board} action={this._handleSquareClick} board_size={this.config.board_size} />
+                <MessageBar message={this.state.message} />
             </div>
         );
     }

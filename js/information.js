@@ -4,8 +4,8 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="header-menu">
-                <span>Flags: {this.props.flags}</span> — 
-                <button onClick={this.props.action}>New game</button>
+                <span className="header-menu--flags">Flags available: {this.props.flags}</span>
+                <button className="header-menu--restart"onClick={this.props.action}>New game</button>
             </div>
         );
     }
