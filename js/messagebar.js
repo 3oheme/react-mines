@@ -5,7 +5,8 @@ module.exports = React.createClass({
     messages: {
 
         'welcome': [
-            'Welcome on board, human'
+            'Welcome on board, human',
+            'I hope you do better than the previous one'
         ],
 
         'reveal': [
@@ -13,8 +14,11 @@ module.exports = React.createClass({
             'Good try, human',
             'Going well',
             'Nice',
+            'Good',
             'Meh',
+            'Well done',
             'Ok',
+            'So far so good',
             'That\'s something',
         ],
 
@@ -23,22 +27,32 @@ module.exports = React.createClass({
             'Flags will save you, human',
             'Are you sure?',
             'That doesn\'t look like a bomb, human',
-            'I\'m afraid you are failing again, human'
+            'There? sure?',
+            'Oh, dear'
         ],
 
         'removeflag': [
             'I knew you are not sure, poor human',
-            'Doub is a human feeling',
+            'Doubt is a human feeling',
+            'Come on, human'
         ],
 
         'gameover': [
-            'Really? I thought you could do better. I was wrong, human',
-            'You are a failure, human'
+            'BOOM! Really? I thought you could do better. I was wrong, human',
+            'You are a failure, human',
+            'You lose. As usual'
         ],
 
         'tryagain': [
             'Try again, you poor human',
-            'Try again, you disgrace'
+            'Try again, you disgrace',
+            'Yes, try again, why not'
+        ],
+
+        'win': [
+            'Yay. You are pretty awesome, human',
+            'You should be terribly proud, human',
+            'Not bad. My Z80 also resolved it a couple of minutes ago'
         ],
     },
 

@@ -74,7 +74,7 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 12
+        bombs: 8
     },
 
     _getRandomInt: function _getRandomInt(min, max) {
@@ -114,12 +114,15 @@ var Game = React.createClass({
         this.setState({
             board: this._createEmptyNxNBoard(this.config.board_size),
             board_init: false,
+            flags: this.config.bombs,
             message: "tryagain"
         });
     },
 
     _handleSquareClick: function _handleSquareClick(e, item, right_click) {
         e.preventDefault();
+
+        // first click on the board
         if (this.state.board_init == false) {
             var new_board = this.setUpBoard(item.pos_x, item.pos_y);
             this.setState({
@@ -130,6 +133,7 @@ var Game = React.createClass({
 
         var new_board = this.state.board;
 
+        // place a flag
         if (right_click) {
             if (new_board[item.pos_x][item.pos_y].revealed == false) {
                 if (new_board[item.pos_x][item.pos_y].flag) {
@@ -148,10 +152,14 @@ var Game = React.createClass({
                     });
                 }
             }
-        } else {
+        }
+
+        // reveal under a square
+        else {
             if (new_board[item.pos_x][item.pos_y].bomb) {
                 this._gameOver();
-            } else {
+                return;
+            } else if (new_board[item.pos_x][item.pos_y].revealed == false) {
                 new_board[item.pos_x][item.pos_y].revealed = true;
                 this.setState({
                     board: new_board,
@@ -159,6 +167,27 @@ var Game = React.createClass({
                 });
             }
         }
+
+        if (this._hasUserWon(new_board)) {
+            this.setState({
+                message: "win"
+            });
+        }
+    },
+
+    _hasUserWon: function _hasUserWon(new_board) {
+        var size = this.config.board_size;
+        var win = true;
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                if (new_board[i][j].revealed || new_board[i][j].bomb && new_board[i][j].flag) {
+                    win = win && true;
+                } else {
+                    win = false;
+                }
+            }
+        }
+        return win;
     },
 
     _gameOver: function _gameOver() {
@@ -219,17 +248,19 @@ module.exports = React.createClass({
 
     messages: {
 
-        welcome: ["Welcome on board, human"],
+        welcome: ["Welcome on board, human", "I hope you do better than the previous one"],
 
-        reveal: ["Don't be afraid, human", "Good try, human", "Going well", "Nice", "Meh", "Ok", "That's something"],
+        reveal: ["Don't be afraid, human", "Good try, human", "Going well", "Nice", "Good", "Meh", "Well done", "Ok", "So far so good", "That's something"],
 
-        addflag: ["You're probably wrong again, human", "Flags will save you, human", "Are you sure?", "That doesn't look like a bomb, human", "I'm afraid you are failing again, human"],
+        addflag: ["You're probably wrong again, human", "Flags will save you, human", "Are you sure?", "That doesn't look like a bomb, human", "There? sure?", "Oh, dear"],
 
-        removeflag: ["I knew you are not sure, poor human", "Doub is a human feeling"],
+        removeflag: ["I knew you are not sure, poor human", "Doubt is a human feeling", "Come on, human"],
 
-        gameover: ["Really? I thought you could do better. I was wrong, human", "You are a failure, human"],
+        gameover: ["BOOM! Really? I thought you could do better. I was wrong, human", "You are a failure, human", "You lose. As usual"],
 
-        tryagain: ["Try again, you poor human", "Try again, you disgrace"] },
+        tryagain: ["Try again, you poor human", "Try again, you disgrace", "Yes, try again, why not"],
+
+        win: ["Yay. You are pretty awesome, human", "You should be terribly proud, human", "Not bad. My Z80 also resolved it a couple of minutes ago"] },
 
     randomMessage: function randomMessage(type) {
         return this.messages[type][Math.floor(Math.random() * this.messages[type].length)];

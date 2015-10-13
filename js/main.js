@@ -16,7 +16,7 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 12
+        bombs: 8
     },
 
     _getRandomInt: function(min, max) {
@@ -56,12 +56,15 @@ var Game = React.createClass({
         this.setState({
             board: this._createEmptyNxNBoard(this.config.board_size),
             board_init: false,
+            flags: this.config.bombs,
             message: 'tryagain'
         });
     },
 
     _handleSquareClick: function(e, item, right_click) {
         e.preventDefault();
+
+        // first click on the board
         if (this.state.board_init == false ) {
             var new_board = this.setUpBoard(item.pos_x, item.pos_y);
             this.setState({
@@ -72,6 +75,7 @@ var Game = React.createClass({
 
         var new_board = this.state.board;
 
+        // place a flag
         if (right_click) {
             if (new_board[item.pos_x][item.pos_y].revealed == false) {
                 if (new_board[item.pos_x][item.pos_y].flag) {
@@ -92,11 +96,14 @@ var Game = React.createClass({
                 }
             }
         }
+
+        // reveal under a square
         else {
             if (new_board[item.pos_x][item.pos_y].bomb) {
                 this._gameOver();
+                return;
             }
-            else {
+            else if (new_board[item.pos_x][item.pos_y].revealed == false) {
                 new_board[item.pos_x][item.pos_y].revealed = true;
                 this.setState({
                     board: new_board,
@@ -104,6 +111,28 @@ var Game = React.createClass({
                 });
             }
         }
+
+        if (this._hasUserWon(new_board)) {
+            this.setState({
+                message: 'win'
+            });
+        }
+    },
+
+    _hasUserWon: function(new_board) {
+        var size = this.config.board_size;
+        var win = true;
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                if (new_board[i][j].revealed || (new_board[i][j].bomb && new_board[i][j].flag)) {
+                    win = win && true;
+                }
+                else {
+                    win = false;
+                }
+            }
+        }
+        return win;
     },
 
     _gameOver: function() {
