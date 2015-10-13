@@ -1,10 +1,15 @@
+$background: #E9F7F7
+$background-light: #D9F7F7
+$border: #A4AAA1
+$accent: #EA526F
+
 body
-    background: #EEE
+    background: $background
 
 .board
     display: table
     table-layout: fixed
-    border: 1px solid #888
+    border: 1px solid $border
 
 .board-row
     display: table-row
@@ -19,7 +24,7 @@ body
     background: #FFFFFF
     vertical-align: middle
     height: 20px
-    border: 1px solid #888
+    border: 1px solid $border
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -28,16 +33,19 @@ body
     user-select: none;
     transition: background 0.2s ease-out
     &.bomb
-        background: #F00
+        background: $accent
     &.hidden
-        background: #AAA
+        background: $background-light
+    &.flag
+        background: #A4AAA1
+        color: white
     &.revealed.number-1
-        background: #BAA
+        background: #B1CF5F
     &.revealed.number-2
-        background: #D88484
+        background: #1B512D
     &.revealed.number-3
-        background: #F36565
+        background: #73E2A7
     &.revealed.number-4
-        background: #F92424
+        background: #1C7C54
     &.revealed.number-5
         background: #E40303

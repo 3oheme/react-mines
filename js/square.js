@@ -19,6 +19,7 @@ module.exports = React.createClass({
         var classes = classNames(
             'square',
             (this.props.item.revealed) ? 'revealed' : 'hidden',
+            (this.props.item.flag) ? 'flag' : '',
             (!this.props.item.bomb) ? ('number-'+ this.props.item.number) : 'bomb'
             );
 

@@ -1,10 +1,10 @@
 body {
-  background: #EEE; }
+  background: #E9F7F7; }
 
 .board {
   display: table;
   table-layout: fixed;
-  border: 1px solid #888; }
+  border: 1px solid #A4AAA1; }
 
 .board-row {
   display: table-row; }
@@ -19,7 +19,7 @@ body {
   background: #FFFFFF;
   vertical-align: middle;
   height: 20px;
-  border: 1px solid #888;
+  border: 1px solid #A4AAA1;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -28,16 +28,19 @@ body {
   user-select: none;
   transition: background 0.2s ease-out; }
   .square.bomb {
-    background: #F00; }
+    background: #EA526F; }
   .square.hidden {
-    background: #AAA; }
+    background: #D9F7F7; }
+  .square.flag {
+    background: #A4AAA1;
+    color: white; }
   .square.revealed.number-1 {
-    background: #BAA; }
+    background: #B1CF5F; }
   .square.revealed.number-2 {
-    background: #D88484; }
+    background: #1B512D; }
   .square.revealed.number-3 {
-    background: #F36565; }
+    background: #73E2A7; }
   .square.revealed.number-4 {
-    background: #F92424; }
+    background: #1C7C54; }
   .square.revealed.number-5 {
     background: #E40303; }

@@ -15,7 +15,7 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 8
+        bombs: 12
     },
 
 
@@ -90,11 +90,29 @@ var Game = React.createClass({
             }
         }
         else {
-            new_board[item.pos_x][item.pos_y].revealed = true;
-            this.setState({
-                board: new_board
-            });
+            if (new_board[item.pos_x][item.pos_y].bomb) {
+                this._gameOver();
+            }
+            else {
+                new_board[item.pos_x][item.pos_y].revealed = true;
+                this.setState({
+                    board: new_board
+                });
+            }
         }
+    },
+
+    _gameOver: function() {
+        var new_board = this.state.board;
+        var size = this.config.board_size;
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                new_board[i][j].revealed = true;
+            }
+        }
+        this.setState({
+            board: new_board
+        });
     },
 
     _createEmptyNxNBoard: function(size) {
