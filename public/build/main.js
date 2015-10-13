@@ -113,7 +113,8 @@ var Game = React.createClass({
         e.preventDefault();
         this.setState({
             board: this._createEmptyNxNBoard(this.config.board_size),
-            board_init: false
+            board_init: false,
+            message: "tryagain"
         });
     },
 
@@ -218,15 +219,17 @@ module.exports = React.createClass({
 
     messages: {
 
-        welcome: ["Welcome, human"],
+        welcome: ["Welcome on board, human"],
 
-        reveal: ["Don't be afraid, human", "Good try, human"],
+        reveal: ["Don't be afraid, human", "Good try, human", "Going well", "Nice", "Meh", "Ok", "That's something"],
 
-        addflag: ["You think it's going well, human", "Flags will save you, human", "Are you sure?", "That doesn't look like a bomb, human", "I'm afraid you are failing again, human"],
+        addflag: ["You're probably wrong again, human", "Flags will save you, human", "Are you sure?", "That doesn't look like a bomb, human", "I'm afraid you are failing again, human"],
 
         removeflag: ["I knew you are not sure, poor human", "Doub is a human feeling"],
 
-        gameover: ["Really? I thought you could do better. I was wrong, human"] },
+        gameover: ["Really? I thought you could do better. I was wrong, human", "You are a failure, human"],
+
+        tryagain: ["Try again, you poor human", "Try again, you disgrace"] },
 
     randomMessage: function randomMessage(type) {
         return this.messages[type][Math.floor(Math.random() * this.messages[type].length)];
@@ -239,6 +242,7 @@ module.exports = React.createClass({
             React.createElement(
                 "p",
                 null,
+                "> ",
                 this.randomMessage(this.props.message)
             )
         );

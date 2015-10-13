@@ -55,7 +55,8 @@ var Game = React.createClass({
         e.preventDefault();
         this.setState({
             board: this._createEmptyNxNBoard(this.config.board_size),
-            board_init: false
+            board_init: false,
+            message: 'tryagain'
         });
     },
 
