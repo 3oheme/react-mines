@@ -138,9 +138,7 @@ var Game = React.createClass({
                     }
                 }
             }
-        }
-        
-        
+        } 
         return board;
     },
 
