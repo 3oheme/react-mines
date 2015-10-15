@@ -74,7 +74,7 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 8
+        bombs: 18
     },
 
     _getRandomInt: function _getRandomInt(min, max) {
@@ -160,7 +160,12 @@ var Game = React.createClass({
                 this._gameOver();
                 return;
             } else if (new_board[item.pos_x][item.pos_y].revealed == false) {
-                new_board[item.pos_x][item.pos_y].revealed = true;
+                // in case we revealed a 0, we need to reveal also all 0 neighbours
+                if (new_board[item.pos_x][item.pos_y].number == 0) {
+                    new_board = this._revealZeroNeighbours(new_board, item.pos_x, item.pos_y);
+                } else {
+                    new_board[item.pos_x][item.pos_y].revealed = true;
+                }
                 this.setState({
                     board: new_board,
                     message: "reveal"
@@ -173,6 +178,24 @@ var Game = React.createClass({
                 message: "win"
             });
         }
+    },
+
+    _revealZeroNeighbours: function _revealZeroNeighbours(board, x, y) {
+        board[x][y].revealed = true;
+        for (var left = -1; left < 2; left++) {
+            for (var top = -1; top < 2; top++) {
+                if (x + left >= 0 && x + left < this.config.board_size && y + top >= 0 && y + top < this.config.board_size) {
+                    if (board[x + left][y + top].revealed === false) {
+                        board[x + left][y + top].revealed = true;
+                        if (board[x + left][y + top].number == 0) {
+                            board = this._revealZeroNeighbours(board, x + left, y + top);
+                        }
+                    }
+                }
+            }
+        }
+
+        return board;
     },
 
     _hasUserWon: function _hasUserWon(new_board) {
@@ -250,15 +273,15 @@ module.exports = React.createClass({
 
         welcome: ["Welcome on board, human", "I hope you do better than the previous one"],
 
-        reveal: ["Don't be afraid, human", "Good try, human", "Going well", "Nice", "Good", "Meh", "Well done", "Ok", "So far so good", "That's something"],
+        reveal: ["Don't be afraid, human", "Good try, human", "Going well", "Nice", "Good", "Meh", "Well done", "Ok", "Fine", "Yes", "So far so good", "That's something"],
 
-        addflag: ["You're probably wrong again, human", "Flags will save you, human", "Are you sure?", "That doesn't look like a bomb, human", "There? sure?", "Oh, dear"],
+        addflag: ["You're probably wrong again, human", "Flags will save you, human", "Are you sure?", "That doesn't look like a bomb, human", "There? sure?", "Oh, dear", "Wrong"],
 
         removeflag: ["I knew you are not sure, poor human", "Doubt is a human feeling", "Come on, human"],
 
         gameover: ["BOOM! Really? I thought you could do better. I was wrong, human", "You are a failure, human", "You lose. As usual"],
 
-        tryagain: ["Try again, you poor human", "Try again, you disgrace", "Yes, try again, why not"],
+        tryagain: ["Try again, you poor human", "Try again, you disgrace", "Yes, try again, why not", "We have plenty of time"],
 
         win: ["Yay. You are pretty awesome, human", "You should be terribly proud, human", "Not bad. My Z80 also resolved it a couple of minutes ago"] },
 

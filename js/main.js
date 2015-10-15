@@ -16,7 +16,7 @@ var Game = React.createClass({
 
     config: {
         board_size: 8,
-        bombs: 8
+        bombs: 18
     },
 
     _getRandomInt: function(min, max) {
@@ -104,7 +104,13 @@ var Game = React.createClass({
                 return;
             }
             else if (new_board[item.pos_x][item.pos_y].revealed == false) {
-                new_board[item.pos_x][item.pos_y].revealed = true;
+                // in case we revealed a 0, we need to reveal also all 0 neighbours
+                if (new_board[item.pos_x][item.pos_y].number == 0) {
+                    new_board = this._revealZeroNeighbours(new_board, item.pos_x, item.pos_y);
+                }
+                else {
+                    new_board[item.pos_x][item.pos_y].revealed = true;
+                }
                 this.setState({
                     board: new_board,
                     message: 'reveal'
@@ -117,6 +123,25 @@ var Game = React.createClass({
                 message: 'win'
             });
         }
+    },
+
+    _revealZeroNeighbours: function(board, x, y) {
+        board[x][y].revealed = true;
+        for (var left = -1; left < 2; left++) { 
+            for (var top = -1; top < 2; top++) {
+                if (x + left >= 0 && x + left < this.config.board_size && y + top >= 0 && y + top < this.config.board_size) {
+                    if (board[x+left][y+top].revealed === false) {
+                        board[x+left][y+top].revealed = true;
+                        if (board[x+left][y+top].number == 0) {
+                            board = this._revealZeroNeighbours(board, x+left, y+top);
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        return board;
     },
 
     _hasUserWon: function(new_board) {

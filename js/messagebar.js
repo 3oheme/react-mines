@@ -18,6 +18,8 @@ module.exports = React.createClass({
             'Meh',
             'Well done',
             'Ok',
+            'Fine',
+            'Yes',
             'So far so good',
             'That\'s something',
         ],
@@ -28,7 +30,8 @@ module.exports = React.createClass({
             'Are you sure?',
             'That doesn\'t look like a bomb, human',
             'There? sure?',
-            'Oh, dear'
+            'Oh, dear',
+            'Wrong',
         ],
 
         'removeflag': [
@@ -40,13 +43,14 @@ module.exports = React.createClass({
         'gameover': [
             'BOOM! Really? I thought you could do better. I was wrong, human',
             'You are a failure, human',
-            'You lose. As usual'
+            'You lose. As usual',
         ],
 
         'tryagain': [
             'Try again, you poor human',
             'Try again, you disgrace',
-            'Yes, try again, why not'
+            'Yes, try again, why not',
+            'We have plenty of time'
         ],
 
         'win': [
