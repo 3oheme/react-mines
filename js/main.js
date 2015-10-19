@@ -1,16 +1,10 @@
 var React = require('react');
 
+var SquareItem = require('./squareitem.js');
+
 var Information = require('./information.js');
 var Board = require('./board.js');
 var MessageBar = require('./messagebar.js');
-
-var SquareItem = function(id, value) {
-    this.key = id;
-    this.number = value;
-    this.revealed = false;
-    this.bomb = false;
-    this.flag = false;
-}
 
 var Game = React.createClass({
 
@@ -29,7 +23,7 @@ var Game = React.createClass({
         for (var i = 0; i < this.config.bombs;) {
             var x = this._getRandomInt(0, this.config.board_size -1);
             var y = this._getRandomInt(0, this.config.board_size -1);
-            if (x != pos_x && y != pos_y && new_board[x][y].bomb == false) {
+            if (x !== pos_x && y !== pos_y && new_board[x][y].bomb === false) {
                 new_board[x][y].bomb = true;
                 i++;
             }
@@ -65,7 +59,7 @@ var Game = React.createClass({
         e.preventDefault();
 
         // first click on the board
-        if (this.state.board_init == false ) {
+        if (this.state.board_init === false ) {
             var new_board = this.setUpBoard(item.pos_x, item.pos_y);
             this.setState({
                 board: new_board,
@@ -77,7 +71,7 @@ var Game = React.createClass({
 
         // place a flag
         if (right_click) {
-            if (new_board[item.pos_x][item.pos_y].revealed == false) {
+            if (new_board[item.pos_x][item.pos_y].revealed === false) {
                 if (new_board[item.pos_x][item.pos_y].flag) {
                     new_board[item.pos_x][item.pos_y].flag = false;
                     this.setState({
@@ -103,9 +97,9 @@ var Game = React.createClass({
                 this._gameOver();
                 return;
             }
-            else if (new_board[item.pos_x][item.pos_y].revealed == false) {
+            else if (new_board[item.pos_x][item.pos_y].revealed === false) {
                 // in case we revealed a 0, we need to reveal also all 0 neighbours
-                if (new_board[item.pos_x][item.pos_y].number == 0) {
+                if (new_board[item.pos_x][item.pos_y].number === 0) {
                     new_board = this._revealZeroNeighbours(new_board, item.pos_x, item.pos_y);
                 }
                 else {
@@ -132,7 +126,7 @@ var Game = React.createClass({
                 if (x + left >= 0 && x + left < this.config.board_size && y + top >= 0 && y + top < this.config.board_size) {
                     if (board[x+left][y+top].revealed === false) {
                         board[x+left][y+top].revealed = true;
-                        if (board[x+left][y+top].number == 0) {
+                        if (board[x+left][y+top].number === 0) {
                             board = this._revealZeroNeighbours(board, x+left, y+top);
                         }
                     }
